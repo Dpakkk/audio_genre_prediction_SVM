@@ -1,5 +1,7 @@
+import librosa
 import pandas as pd
 import numpy as np
+#np.renadom(988)
 np.random.seed(123)
 import pickle
 
@@ -18,7 +20,7 @@ class Set():
         self.data       = data
         self.le         = LabelEncoder().fit(self.data.GENRES)
 
-        print("\n-> Set() object is initialized.")
+        print("\n set() object initialized")
 
     def make_dataset(self):
         df  = self.data.raw_data.copy()
@@ -70,11 +72,11 @@ class Set():
     def save(self):
         with open(SET_DATAPATH, 'wb') as outfile:
             pickle.dump((self.train_set, self.valid_set, self.test_set), outfile, pickle.HIGHEST_PROTOCOL)
-        print("-> Set() object is saved.\n")
+        print("-set() object saved\n")
         return
 
     def load(self):
         with open(SET_DATAPATH, 'rb') as infile:
             (self.train_set, self.valid_set, self.test_set) = pickle.load(infile)
-        print("-> Set() object is loaded.\n")
+        print("set() object loaded\n")
         return
