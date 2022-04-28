@@ -1,3 +1,6 @@
+'''
+This nmodel is for loading the training dataset and used it for our genre prediction.
+'''
 import torch
 torch.manual_seed(123)
 from torch.autograd import Variable
@@ -9,16 +12,12 @@ from set import Set
 
 
 def main():
-    # ------------------------------------------------------------------------------------------- #
-    ## DATA
+    # data loading
     data    = Data(GENRES, DATAPATH)
     data.make_raw_data()
     data.save()
     data    = Data(GENRES, DATAPATH)
     data.load()
-    # ------------------------------------------------------------------------------------------- #
-    # ------------------------------------------------------------------------------------------- #
-    ## SET
     set_    = Set(data)
     set_.make_dataset()
     set_.save()
@@ -28,7 +27,6 @@ def main():
     x_train, y_train    = set_.get_train_set()
     x_valid, y_valid    = set_.get_valid_set()
     x_test,  y_test     = set_.get_test_set()
-    # ------------------------------------------------------------------------------------------- #
 
     TRAIN_SIZE  = len(x_train)
     VALID_SIZE  = len(x_valid)
@@ -46,11 +44,9 @@ def main():
     for epoch in range(EPOCH_NUM):
         inp_train, out_train    = Variable(torch.from_numpy(x_train)).float().cuda(), Variable(torch.from_numpy(y_train)).long().cuda()
         inp_valid, out_valid    = Variable(torch.from_numpy(x_valid)).float().cuda(), Variable(torch.from_numpy(y_valid)).long().cuda()
-        # ------------------------------------------------------------------------------------------------- #
-        ## TRAIN PHASE # TRAIN PHASE # TRAIN PHASE # TRAIN PHASE # TRAIN PHASE # TRAIN PHASE # TRAIN PHASE  #
-        # ------------------------------------------------------------------------------------------------- #
+        # train phase
         train_loss = 0
-        optimizer.zero_grad()  # <-- OPTIMIZER
+        optimizer.zero_grad()  # optimizer
         for i in range(0, TRAIN_SIZE, BATCH_SIZE):
             x_train_batch, y_train_batch = inp_train[i:i + BATCH_SIZE], out_train[i:i + BATCH_SIZE]
 
@@ -59,7 +55,7 @@ def main():
             train_loss          += loss_train_batch.data.cpu().numpy()[0]
 
             loss_train_batch.backward()
-        optimizer.step()  # <-- OPTIMIZER
+        optimizer.step()  # optimizer
 
         epoch_train_loss    = (train_loss * BATCH_SIZE) / TRAIN_SIZE
         train_sum           = 0
@@ -69,9 +65,7 @@ def main():
             train_sum       += (indices_train == out_train[i:i + BATCH_SIZE]).sum().data.cpu().numpy()[0]
         train_accuracy  = train_sum / float(TRAIN_SIZE)
 
-        # ------------------------------------------------------------------------------------------------- #
-        ## VALIDATION PHASE ## VALIDATION PHASE ## VALIDATION PHASE ## VALIDATION PHASE ## VALIDATION PHASE #
-        # ------------------------------------------------------------------------------------------------- #
+        # validation phase stats here
         valid_loss = 0
         for i in range(0, VALID_SIZE, BATCH_SIZE):
             x_valid_batch, y_valid_batch = inp_valid[i:i + BATCH_SIZE], out_valid[i:i + BATCH_SIZE]
@@ -90,18 +84,13 @@ def main():
 
         print("Epoch: %d\t\tTrain loss : %.2f\t\tValid loss : %.2f\t\tTrain acc : %.2f\t\tValid acc : %.2f" % \
               (epoch + 1, epoch_train_loss, epoch_valid_loss, train_accuracy, valid_accuracy))
-        # ------------------------------------------------------------------------------------------------- #
 
-    # ------------------------------------------------------------------------------------------------- #
-    ## SAVE GENRENET MODEL
-    # ------------------------------------------------------------------------------------------------- #
+
+    # saving the generated model
     torch.save(net.state_dict(), MODELPATH)
-    print('-> ptorch model is saved.')
-    # ------------------------------------------------------------------------------------------------- #
+    print('ptorch model is saved.')
 
-    # ------------------------------------------------------------------------------------------------- #
-    ## EVALUATE TEST ACCURACY
-    # ------------------------------------------------------------------------------------------------- #
+    # evaluating the model
     inp_test, out_test = Variable(torch.from_numpy(x_test)).float().cuda(), Variable(torch.from_numpy(y_test)).long().cuda()
     test_sum = 0
     for i in range(0, TEST_SIZE, BATCH_SIZE):
@@ -109,7 +98,7 @@ def main():
         indices_test    = pred_test.max(1)[1]
         test_sum        += (indices_test == out_test[i:i + BATCH_SIZE]).sum().data.cpu().numpy()[0]
     test_accuracy   = test_sum / float(TEST_SIZE)
-    print("Test acc: %.2f" % test_accuracy)
+    print("Test accuracy is : %.2f" % test_accuracy)
     # ------------------------------------------------------------------------------------------------- #
 
     return
