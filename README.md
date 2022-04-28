@@ -16,7 +16,7 @@ The Data is collected from: [GTZAN Genre Collection](http://marsyasweb.appspot.c
  
  ### Usage
  - Clone the repository
- - intall the prerequisite library()
+ - intall the prerequisite library(numpy, librosa, torch, sklearn)
  - go to the root folder
  - run get_genre.py file
  - run get_genre.py ../test.mp3
