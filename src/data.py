@@ -1,7 +1,7 @@
+import os
 import pandas as pd
 import numpy as np
 import pickle
-import os
 
 from librosa.core import load
 from librosa.feature import melspectrogram
@@ -16,7 +16,7 @@ class Data():
         self.raw_data = None
         self.GENRES = genres
         self.DATAPATH = datapath
-        print("\n-> Data() object is initialized.")
+        print("\n-> this is to check whether object is initialized or not")
 
     def make_raw_data(self):
         records = list()
@@ -40,12 +40,12 @@ class Data():
     def save(self):
         with open(RAW_DATAPATH, 'wb') as outfile:
             pickle.dump(self.raw_data, outfile, pickle.HIGHEST_PROTOCOL)
-        print('-> Data() object is saved.\n')
+        print('object saved!!\n')
         return
 
     def load(self):
         with open(RAW_DATAPATH, 'rb') as infile:
             self.raw_data = pickle.load(infile)
-        print("-> Data() object is loaded.")
+        print("object saved!!")
         return
 
