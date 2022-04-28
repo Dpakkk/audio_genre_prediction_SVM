@@ -1,4 +1,4 @@
-# 10 GENRES USED FOR CLASSIFICATION
+# total of 10 genre has been used by our model
 GENRES = [ 'blues',
                 'classical',
                 'country',
@@ -10,7 +10,7 @@ GENRES = [ 'blues',
                 'reggae',
                 'rock']
 
-# DEFINE PATHS
+# many variables are set for the path of following conditions
 DATAPATH = '../data/'
 RAW_DATAPATH = '../utils/raw_data.pkl'
 SET_DATAPATH = '../utils/set.pkl'
