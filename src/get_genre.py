@@ -26,6 +26,17 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
+def separate_by_class(audio_path):
+	separated = dict()
+	for i in range(len(dataset)):
+		vector = dataset[i]
+		class_value = vector[-1]
+		if (class_value not in separated):
+			separated[class_value] = list()
+		separated[class_value].append(vector)
+    return separated
+
+
 def main(argv):
 
     if len(argv) != 1:
@@ -46,6 +57,25 @@ def main(argv):
     data_chunks = np.split(S, num_chunk)
     ## classify spec
     genres = list()
+    
+    # Split the dataset by class values, returns a dictionary
+def separate_by_class(dataset):
+	separated = dict()
+	for i in range(len(dataset)):
+		vector = dataset[i]
+		class_value = vector[-1]
+		if (class_value not in separated):
+			separated[class_value] = list()
+		separated[class_value].append(vector)
+	return separated
+ 
+# Test separating data by class
+separated = separate_by_class(dataset)
+for label in separated:
+	print(label)
+	for row in separated[label]:
+		print(row)
+    
     for i, data in enumerate(data_chunks):
         data = torch.FloatTensor(data).view(1, 1, 128, 128)
         preds = net(data)
