@@ -10,7 +10,23 @@ from sklearn.utils import shuffle
 
 from config import SET_DATAPATH
 
-
+# checking all the parameters
+def separate_by_class(dataset):
+	separated = dict()
+	for i in range(len(dataset)):
+		vector = dataset[i]
+		class_value = vector[-1]
+		if (class_value not in separated):
+			separated[class_value] = list()
+		separated[class_value].append(vector)
+	return separated
+ 
+separated = separate_by_class(dataset)
+for label in separated:
+	print(label)
+	for row in separated[label]:
+		print(row)
+        
 class Set():
 
     def __init__(self, data):
